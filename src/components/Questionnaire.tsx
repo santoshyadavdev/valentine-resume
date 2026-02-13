@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { questions, type Answers, type Question, type QuestionOption } from '../data/questions';
+import { encodeProfile } from '../utils/profileEncoder';
 
 // Heart Icon SVG Component
 const HeartIcon = ({ filled = false, className = '' }: { filled?: boolean; className?: string }) => (
@@ -160,9 +161,15 @@ export default function Questionnaire() {
     if (!canProceed) return;
 
     if (isLastStep) {
-      setIsComplete(true);
-      // Here you could handle form submission
-      console.log('Completed answers:', answers);
+      // Encode answers and redirect to profile page
+      const encodedProfile = encodeProfile(answers);
+      if (encodedProfile) {
+        window.location.href = `/profile/${encodedProfile}`;
+      } else {
+        // Fallback if encoding fails
+        setIsComplete(true);
+        console.log('Completed answers:', answers);
+      }
     } else {
       setCurrentStep((prev) => prev + 1);
     }

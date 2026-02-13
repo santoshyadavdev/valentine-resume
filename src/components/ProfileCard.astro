@@ -1,0 +1,186 @@
+---
+import type { ProfileData } from '../utils/profileEncoder';
+import { questions } from '../data/questions';
+
+interface Props {
+  profile: ProfileData;
+  profileUrl: string;
+}
+
+const { profile, profileUrl } = Astro.props;
+
+// Get option labels for answers
+const getOptionLabel = (questionId: string, value: string): { label: string; emoji?: string } | null => {
+  const question = questions.find(q => q.id === questionId);
+  if (!question) return null;
+  const option = question.options.find(o => o.value === value);
+  return option ? { label: option.label, emoji: option.emoji } : null;
+};
+
+// Build interests from answers
+const interests = [
+  getOptionLabel('hobbies', profile.answers.hobbies || ''),
+  getOptionLabel('weekend', profile.answers.weekend || ''),
+  getOptionLabel('travel', profile.answers.travel || ''),
+].filter(Boolean) as { label: string; emoji?: string }[];
+
+// Build date preferences
+const dateStyle = getOptionLabel('date-style', profile.answers['date-style'] || '');
+const relationshipValue = getOptionLabel('relationship-value', profile.answers['relationship-value'] || '');
+const loveExpression = getOptionLabel('love-expression', profile.answers['love-expression'] || '');
+---
+
+<article class="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-valentine-lg border border-valentine-pink-light">
+  <!-- Decorative Header -->
+  <div class="bg-love-gradient h-3"></div>
+  
+  <!-- Profile Header -->
+  <header class="relative px-6 pt-8 pb-6 text-center border-b border-valentine-pink-light">
+    <!-- Decorative Hearts Background -->
+    <div class="absolute inset-0 overflow-hidden opacity-10">
+      <div class="absolute top-4 left-8 text-4xl">💕</div>
+      <div class="absolute top-12 right-12 text-3xl">💗</div>
+      <div class="absolute bottom-8 left-16 text-2xl">💝</div>
+      <div class="absolute bottom-4 right-8 text-3xl">💖</div>
+    </div>
+    
+    <!-- Profile Avatar -->
+    <div class="relative inline-block mb-4">
+      <div class="w-24 h-24 md:w-32 md:h-32 bg-valentine-gradient rounded-full flex items-center justify-center
+        shadow-valentine border-4 border-white">
+        <span class="text-4xl md:text-5xl">💕</span>
+      </div>
+      <!-- Heart Badge -->
+      <div class="absolute -bottom-1 -right-1 w-10 h-10 bg-valentine-rose rounded-full 
+        flex items-center justify-center border-4 border-white shadow-md">
+        <span class="text-lg">❤️</span>
+      </div>
+    </div>
+    
+    <!-- Name -->
+    <h1 class="font-heading text-3xl md:text-4xl text-valentine-rose-dark mb-2">
+      {profile.name}
+    </h1>
+    
+    <!-- Valentine Title -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 bg-valentine-rose-light rounded-full">
+      <span class="text-lg">✨</span>
+      <span class="font-body font-semibold text-valentine-rose-dark">
+        {profile.valentineTitle}
+      </span>
+      <span class="text-lg">✨</span>
+    </div>
+  </header>
+
+  <!-- Profile Content -->
+  <div class="p-6 md:p-8 space-y-8">
+    
+    <!-- Personality Traits Section -->
+    <section>
+      <h2 class="flex items-center gap-2 font-heading text-xl text-valentine-rose-dark mb-4">
+        <span class="text-2xl">🌟</span>
+        Personality Traits
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        {profile.personality.map((trait) => (
+          <span class="px-4 py-2 bg-valentine-cream rounded-full font-body text-sm text-valentine-rose-dark
+            border border-valentine-pink-light">
+            {trait}
+          </span>
+        ))}
+      </div>
+    </section>
+
+    <!-- Love Language Section -->
+    <section class="bg-valentine-blush rounded-2xl p-5 border border-valentine-pink-light">
+      <h2 class="flex items-center gap-2 font-heading text-xl text-valentine-rose-dark mb-3">
+        <span class="text-2xl">💬</span>
+        Love Language
+      </h2>
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-valentine-rose-light rounded-full flex items-center justify-center">
+          <span class="text-2xl">💕</span>
+        </div>
+        <span class="font-body text-lg font-medium text-valentine-rose-dark">
+          {profile.loveLanguage}
+        </span>
+      </div>
+    </section>
+
+    <!-- Interests & Hobbies Section -->
+    <section>
+      <h2 class="flex items-center gap-2 font-heading text-xl text-valentine-rose-dark mb-4">
+        <span class="text-2xl">💖</span>
+        Interests & Preferences
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {interests.map((interest) => (
+          <div class="flex items-center gap-3 p-4 bg-white rounded-xl border border-valentine-pink-light
+            shadow-sm hover:shadow-valentine transition-shadow duration-300">
+            {interest.emoji && <span class="text-2xl">{interest.emoji}</span>}
+            <span class="font-body text-sm font-medium text-gray-700">{interest.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Compatibility Highlights Section -->
+    {profile.compatibilityTraits.length > 0 && (
+      <section>
+        <h2 class="flex items-center gap-2 font-heading text-xl text-valentine-rose-dark mb-4">
+          <span class="text-2xl">💑</span>
+          Compatibility Highlights
+        </h2>
+        <div class="flex flex-wrap gap-2">
+          {profile.compatibilityTraits.map((trait) => (
+            <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-valentine-pink-light 
+              rounded-full text-sm font-body text-valentine-rose-dark">
+              <span class="text-valentine-rose">♥</span>
+              {trait}
+            </span>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Romantic Preferences Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {dateStyle && (
+        <div class="p-4 bg-gradient-to-br from-valentine-rose-light to-valentine-pink-light rounded-xl">
+          <h3 class="font-body text-sm text-valentine-rose-dark/70 mb-1">Ideal Date</h3>
+          <p class="font-body font-medium text-valentine-rose-dark flex items-center gap-2">
+            {dateStyle.emoji && <span>{dateStyle.emoji}</span>}
+            {dateStyle.label}
+          </p>
+        </div>
+      )}
+      
+      {relationshipValue && (
+        <div class="p-4 bg-gradient-to-br from-valentine-pink-light to-valentine-cream rounded-xl">
+          <h3 class="font-body text-sm text-valentine-rose-dark/70 mb-1">Values Most</h3>
+          <p class="font-body font-medium text-valentine-rose-dark flex items-center gap-2">
+            {relationshipValue.emoji && <span>{relationshipValue.emoji}</span>}
+            {relationshipValue.label}
+          </p>
+        </div>
+      )}
+      
+      {loveExpression && (
+        <div class="p-4 bg-gradient-to-br from-valentine-cream to-valentine-blush rounded-xl md:col-span-2">
+          <h3 class="font-body text-sm text-valentine-rose-dark/70 mb-1">Shows Love By</h3>
+          <p class="font-body font-medium text-valentine-rose-dark flex items-center gap-2">
+            {loveExpression.emoji && <span>{loveExpression.emoji}</span>}
+            {loveExpression.label}
+          </p>
+        </div>
+      )}
+    </section>
+  </div>
+
+  <!-- Decorative Footer -->
+  <footer class="px-6 py-4 bg-valentine-blush border-t border-valentine-pink-light text-center">
+    <p class="font-body text-sm text-valentine-rose-dark/60">
+      Made with 💕 on Valentine's Resume
+    </p>
+  </footer>
+</article>
