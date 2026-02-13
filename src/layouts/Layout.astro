@@ -14,9 +14,10 @@ const {
   ogImage = "/og-valentine.png"
 } = Astro.props;
 
-const canonicalUrl = Astro.url.href;
-const baseUrl = Astro.site?.href || Astro.url.origin;
-const ogImageUrl = `${baseUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+// Use Astro.site for production URL, fallback to request URL for dev
+const baseUrl = Astro.site?.origin || Astro.url.origin;
+const canonicalUrl = `${baseUrl}${Astro.url.pathname}`;
+const ogImageUrl = `${baseUrl}${ogImage}`;
 ---
 
 <!doctype html>
@@ -38,6 +39,9 @@ const ogImageUrl = `${baseUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:type" content="image/png" />
 		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Valentine's Resume" />
