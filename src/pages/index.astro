@@ -1,16 +1,56 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Questionnaire from '../components/Questionnaire';
 ---
 
 <Layout>
-	<main class="min-h-screen bg-valentine-gradient">
-		<div class="container mx-auto px-4 py-16 text-center">
-			<h1 class="font-heading text-4xl md:text-6xl text-valentine-rose-dark mb-4">
-				Valentine's Resume
-			</h1>
-			<p class="font-body text-lg text-gray-600 max-w-2xl mx-auto">
-				Share your love story in a unique and romantic way
-			</p>
+	<main class="min-h-screen bg-valentine-gradient relative overflow-hidden">
+		<!-- Decorative floating hearts -->
+		<div class="absolute inset-0 pointer-events-none overflow-hidden">
+			<div class="absolute top-10 left-10 text-4xl animate-float opacity-30">💕</div>
+			<div class="absolute top-20 right-20 text-3xl animate-float opacity-20" style="animation-delay: 0.5s;">💖</div>
+			<div class="absolute top-40 left-1/4 text-2xl animate-float opacity-25" style="animation-delay: 1s;">💗</div>
+			<div class="absolute bottom-20 right-1/4 text-3xl animate-float opacity-20" style="animation-delay: 1.5s;">💝</div>
+			<div class="absolute bottom-40 left-20 text-2xl animate-float opacity-25" style="animation-delay: 2s;">💘</div>
+			<div class="absolute top-1/3 right-10 text-4xl animate-float opacity-15" style="animation-delay: 0.75s;">❤️</div>
+		</div>
+
+		<div class="container mx-auto px-4 py-12 md:py-16 relative z-10">
+			<!-- Hero Section -->
+			<header class="text-center mb-12">
+				<div class="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full mb-6 shadow-sm">
+					<span class="text-valentine-rose animate-pulse-heart">💕</span>
+					<span class="text-sm font-body text-valentine-rose-dark font-medium">Valentine's Day Special</span>
+					<span class="text-valentine-rose animate-pulse-heart">💕</span>
+				</div>
+				
+				<h1 class="font-heading text-4xl md:text-6xl lg:text-7xl text-valentine-rose-dark mb-4 leading-tight">
+					Valentine's Resume
+				</h1>
+				
+				<p class="font-body text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-2">
+					Create your romantic profile and discover your love personality
+				</p>
+				
+				<p class="font-body text-sm text-gray-500 max-w-lg mx-auto">
+					Answer a few fun questions and we'll craft your perfect Valentine's profile to share with that special someone 💌
+				</p>
+			</header>
+
+			<!-- Questionnaire Component -->
+			<section class="max-w-3xl mx-auto">
+				<Questionnaire client:load />
+			</section>
+
+			<!-- Decorative footer element -->
+			<footer class="text-center mt-16 pb-8">
+				<div class="inline-flex items-center gap-3 text-valentine-pink">
+					<span class="h-px w-12 bg-valentine-pink-light"></span>
+					<span class="text-2xl">💕</span>
+					<span class="h-px w-12 bg-valentine-pink-light"></span>
+				</div>
+				<p class="text-sm text-gray-400 mt-4 font-body">Made with love for Valentine's Day 2026</p>
+			</footer>
 		</div>
 	</main>
 </Layout>
