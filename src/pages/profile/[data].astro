@@ -1,29 +1,42 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ProfileCard from '../../components/ProfileCard.astro';
-import { decodeProfile, buildProfileData } from '../../utils/profileEncoder';
+import { decodeProfile, buildProfileData, type ProfileData } from '../../utils/profileEncoder';
 
 export const prerender = false;
 
 // Extract the data parameter from the URL
 const { data } = Astro.params;
 
-// Decode the profile data
-const answers = decodeProfile(data || '');
+// Decode the profile data with error handling
+let answers = null;
+let profileData: ProfileData | null = null;
+let hasError = false;
 
-// Handle invalid/corrupted data
-if (!answers) {
-  return Astro.redirect('/?error=invalid-profile');
+try {
+  answers = decodeProfile(data || '');
+  if (answers) {
+    profileData = buildProfileData(answers);
+  } else {
+    hasError = true;
+  }
+} catch (e) {
+  console.error('Error decoding profile:', e);
+  hasError = true;
 }
 
-// Build the complete profile data
-const profileData = buildProfileData(answers);
+// Handle invalid/corrupted data - redirect to home
+if (hasError || !profileData) {
+  return Astro.redirect('/?error=invalid-profile');
+}
 
 // Generate dynamic meta tags
 const pageTitle = `${profileData.name}'s Valentine Profile 💕`;
 const pageDescription = `${profileData.name} is a ${profileData.valentineTitle}! Their love language is ${profileData.loveLanguage.replace(/[^\w\s]/g, '')}. View their complete Valentine profile and discover what makes them special.`;
 const ogImage = '/og-valentine.svg';
 const profileUrl = Astro.url.href;
+const baseUrl = Astro.url.origin;
+const ogImageUrl = `${baseUrl}${ogImage}`;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -31,7 +44,7 @@ const profileUrl = Astro.url.href;
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:image" content={new URL(ogImage, Astro.site || Astro.url.origin).href} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:url" content={profileUrl} />
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content="Valentine's Resume" />
@@ -40,7 +53,7 @@ const profileUrl = Astro.url.href;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={new URL(ogImage, Astro.site || Astro.url.origin).href} />
+    <meta name="twitter:image" content={ogImageUrl} />
   </head>
 
   <main class="min-h-screen bg-valentine-gradient py-8 px-4">
