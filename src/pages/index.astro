@@ -1,11 +1,16 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+	<main class="min-h-screen bg-valentine-gradient">
+		<div class="container mx-auto px-4 py-16 text-center">
+			<h1 class="font-heading text-4xl md:text-6xl text-valentine-rose-dark mb-4">
+				Valentine's Resume
+			</h1>
+			<p class="font-body text-lg text-gray-600 max-w-2xl mx-auto">
+				Share your love story in a unique and romantic way
+			</p>
+		</div>
+	</main>
 </Layout>

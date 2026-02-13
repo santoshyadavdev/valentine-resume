@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="floralGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fce7f3"/>
+      <stop offset="50%" style="stop-color:#f9a8d4"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <linearGradient id="floralGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffe4e6"/>
+      <stop offset="100%" style="stop-color:#f43f5e"/>
+    </linearGradient>
+  </defs>
+  <!-- Decorative rose petals -->
+  <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#floralGrad1)" opacity="0.3" transform="rotate(0 100 100)"/>
+  <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#floralGrad2)" opacity="0.3" transform="rotate(60 100 100)"/>
+  <ellipse cx="100" cy="100" rx="80" ry="40" fill="url(#floralGrad1)" opacity="0.3" transform="rotate(120 100 100)"/>
+  <!-- Center heart -->
+  <path d="M100 140l-2.16-1.97C81.6 123.27 70 116.33 70 107.75c0-5.94 4.56-10.5 10.5-10.5 3.36 0 6.57 1.56 8.64 4.02L100 113l10.86-11.73c2.07-2.46 5.28-4.02 8.64-4.02 5.94 0 10.5 4.56 10.5 10.5 0 8.58-11.6 15.52-27.84 30.28L100 140z" fill="url(#floralGrad2)"/>
+</svg>
