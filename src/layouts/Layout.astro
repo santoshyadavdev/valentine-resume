@@ -1,4 +1,7 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
+
 interface Props {
   title?: string;
   description?: string;
@@ -57,6 +60,7 @@ const ogImageUrl = `${baseUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 	</head>
 	<body class="min-h-screen bg-valentine-warm-white font-body text-gray-800 antialiased">
 		<slot />
+		<Analytics />
 	</body>
 </html>
 
