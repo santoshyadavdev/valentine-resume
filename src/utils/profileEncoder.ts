@@ -145,6 +145,7 @@ export function buildProfileData(answers: Answers): ProfileData {
 
 /**
  * Encode profile data to URL-safe string
+ * Uses Buffer for Node.js compatibility
  */
 export function encodeProfile(answers: Answers): string {
   try {
@@ -162,7 +163,14 @@ export function encodeProfile(answers: Answers): string {
     
     // Convert to JSON and then base64
     const jsonStr = JSON.stringify(compactAnswers);
-    const base64 = btoa(encodeURIComponent(jsonStr));
+    
+    // Use Buffer for Node.js, fallback to btoa for browser
+    let base64: string;
+    if (typeof Buffer !== 'undefined') {
+      base64 = Buffer.from(jsonStr, 'utf-8').toString('base64');
+    } else {
+      base64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+    }
     
     // Make URL-safe by replacing special characters
     return base64
@@ -177,6 +185,7 @@ export function encodeProfile(answers: Answers): string {
 
 /**
  * Decode profile data from URL parameter
+ * Uses Buffer for Node.js compatibility
  */
 export function decodeProfile(encodedData: string): Answers | null {
   try {
@@ -195,8 +204,19 @@ export function decodeProfile(encodedData: string): Answers | null {
       base64 += '='.repeat(4 - padding);
     }
     
-    // Decode base64 and parse JSON
-    const jsonStr = decodeURIComponent(atob(base64));
+    // Use Buffer for Node.js, fallback to atob for browser
+    let jsonStr: string;
+    if (typeof Buffer !== 'undefined') {
+      jsonStr = Buffer.from(base64, 'base64').toString('utf-8');
+    } else {
+      jsonStr = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+    }
+    
     const compactAnswers = JSON.parse(jsonStr);
     
     // Validate the structure

@@ -1,7 +1,7 @@
 /* empty css                                    */
 import { e as createComponent, m as maybeRenderHead, r as renderTemplate, h as createAstro, k as defineScriptVars, l as renderComponent, g as addAttribute } from '../../chunks/astro/server_Bww52DyY.mjs';
 import 'piccolore';
-import { q as questions, d as decodeProfile, b as buildProfileData, $ as $$Layout } from '../../chunks/profileEncoder_qPRpKm3M.mjs';
+import { q as questions, d as decodeProfile, b as buildProfileData, $ as $$Layout } from '../../chunks/profileEncoder_BMbcfExd.mjs';
 import 'clsx';
 export { renderers } from '../../renderers.mjs';
 

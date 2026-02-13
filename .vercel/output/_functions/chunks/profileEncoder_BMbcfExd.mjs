@@ -240,7 +240,12 @@ function encodeProfile(answers) {
       e: answers["love-expression"] || ""
     };
     const jsonStr = JSON.stringify(compactAnswers);
-    const base64 = btoa(encodeURIComponent(jsonStr));
+    let base64;
+    if (typeof Buffer !== "undefined") {
+      base64 = Buffer.from(jsonStr, "utf-8").toString("base64");
+    } else {
+      base64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+    }
     return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   } catch (error) {
     console.error("Error encoding profile:", error);
@@ -257,7 +262,14 @@ function decodeProfile(encodedData) {
     if (padding) {
       base64 += "=".repeat(4 - padding);
     }
-    const jsonStr = decodeURIComponent(atob(base64));
+    let jsonStr;
+    if (typeof Buffer !== "undefined") {
+      jsonStr = Buffer.from(base64, "base64").toString("utf-8");
+    } else {
+      jsonStr = decodeURIComponent(
+        atob(base64).split("").map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join("")
+      );
+    }
     const compactAnswers = JSON.parse(jsonStr);
     if (typeof compactAnswers !== "object") {
       return null;
