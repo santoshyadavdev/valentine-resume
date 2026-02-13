@@ -34,8 +34,9 @@ if (hasError || !profileData) {
 const pageTitle = `${profileData.name}'s Valentine Profile 💕`;
 const pageDescription = `${profileData.name} is a ${profileData.valentineTitle}! Their love language is ${profileData.loveLanguage.replace(/[^\w\s]/g, '')}. View their complete Valentine profile and discover what makes them special.`;
 const ogImage = '/og-valentine.svg';
-const profileUrl = Astro.url.href;
-const baseUrl = Astro.url.origin;
+// Use Astro.site for production URL, fallback to request URL for dev
+const baseUrl = Astro.site?.origin || Astro.url.origin;
+const profileUrl = `${baseUrl}${Astro.url.pathname}`;
 const ogImageUrl = `${baseUrl}${ogImage}`;
 ---
 

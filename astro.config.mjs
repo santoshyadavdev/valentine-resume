@@ -6,6 +6,7 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
+  site: process.env.SITE_URL || 'https://valentine-resume.vercel.app',
   output: 'server',
   adapter: vercel(),
   integrations: [
